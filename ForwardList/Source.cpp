@@ -106,12 +106,14 @@ public:
 	
 	void  erase(int Index)
 	{
-	    Element* Temp = Head; 
-		for (int i = 0; i < Index -1; i++) Temp = Temp->pNext;  //1) Доходим до элемента с нужным индексом
-		Element* Erased = Temp->pNext;  //2)исключаем элемент с указанным индексом из списка
-		Temp->pNext = Erased->pNext;
-		delete Erased;    //3) удаляем элемент с индексом
-		size--;                //4)уменьшаем размер списка
+		if (Index == 0)return pop_front(); //если индекс равен нулю, реализуем pop_front (удаление первого элемента в списке)
+		if (Index > size)return;
+		Element* Temp = Head; 
+		for (int i = 0; i < Index -1; i++) Temp = Temp->pNext;  //1) Доходим до нужного элемента (предыдущий перед удаляемым
+		Element* Erased = Temp->pNext;  //2)запоминаем адрес предыдущего элемента
+		Temp->pNext = Erased->pNext;    //3)адрес предыдущего элемента привязываем к следующему за удаляемым элементом, исключаем элемент из списка
+		delete Erased;    //4) удаляем элемент с индексом
+		size--;                //5)уменьшаем размер списка
 	}
 
 	//   Methods:
