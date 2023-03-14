@@ -106,11 +106,12 @@ public:
 	
 	void  erase(int Index)
 	{
-	    //if (Temp == Head) Head = Temp->pNext;
-		Element* Temp = Head;
-		for (int i = 0; i < Index -1; i--) Temp = Temp->pNext;
-		delete Temp->pNext;
-		size--;
+	    Element* Temp = Head; 
+		for (int i = 0; i < Index -1; i++) Temp = Temp->pNext;  //1) Доходим до элемента с нужным индексом
+		Element* Erased = Temp->pNext;  //2)исключаем элемент с указанным индексом из списка
+		Temp->pNext = Erased->pNext;
+		delete Erased;    //3) удаляем элемент с индексом
+		size--;                //4)уменьшаем размер списка
 	}
 
 	//   Methods:
