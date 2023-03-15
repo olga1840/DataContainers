@@ -1,5 +1,6 @@
 ﻿#include<iostream>
 using namespace std;
+using std::cout;
 
 #define tab "\t"
 
@@ -20,22 +21,73 @@ public:
 		cout << "EDestructor:\t" << this << endl;
 	}
 	friend class ForwardList;
+	friend class Iterator;
 };
 
 int Element::count = 0; //инициализируем статическую переменную, объявленную в классе  'Element'
+
+class Iterator
+{
+	Element* Temp;
+public:
+	Iterator(Element* Temp = nullptr) :Temp(Temp)
+	{
+		cout << "ItConstructor:\t" << this << endl;
+	}
+	~Iterator()
+	{
+		cout << "ItDestructor:\t" << this << endl;
+	}
+
+	Iterator& operator++()
+	{
+		Temp = Temp->pNext;
+		return *this;
+	}
+
+	bool operator==(const Iterator& other)const
+	{
+		return this->Temp == other.Temp;
+	}
+	bool operator!=(const Iterator& other)const
+	{
+		return this->Temp != other.Temp;
+	}
+	int& operator*()
+	{
+		return Temp->Data;
+	}
+};
 
 class ForwardList    //forward - односвязный, однонаправленный
 {
 	Element* Head;    //голова списка - содержит указатель на нулевой элемент списка
 	int size;
 public:
+	Iterator begin()
+	{
+		return Head;
+	}
+	Iterator end()
+	{
+		return nullptr;
+	}
 	ForwardList()
 	{
 		Head = nullptr; //Если список пуст, то его голова указывает на 0
 		cout << "LConstructor:\t" << this << endl;
 	}
+	ForwardList(const std::initializer_list<int>& il) :ForwardList() //il - initializer list
+	{
+		cout << typeid(il.begin()).name() << endl;
+		for (int const* it = il.begin(); it != il.end(); it++)
+		{
+			push_back(*it);
+		}
+	}
 	~ForwardList()
 	{
+		while (Head)pop_front();
 		cout << "LDestructor:\t" << this << endl;
 	}
 
@@ -70,15 +122,16 @@ public:
 		if (Index > size)return;
 
 		//1) создаем новый элемент:
-		Element* New = new Element(Data);
+		//Element* New = new Element(Data);
 
 		//2) Доходим до нужного элемента
 		Element* Temp = Head;
 		for (int i = 0; i < Index - 1; i++)Temp = Temp->pNext;
 
 		//3) Вставляем новый элемент в список:
-		New->pNext = Temp->pNext;
-		Temp->pNext = New;
+		/*New->pNext = Temp->pNext;
+		Temp->pNext = New;*/
+		Temp->pNext = new Element(Data, Temp->pNext);
 		size++;
 	}
 
@@ -106,11 +159,11 @@ public:
 	
 	void  erase(int Index)
 	{
-		if (Index == 0)return pop_front(); //если индекс равен нулю, реализуем pop_front (удаление первого элемента в списке)
-		if (Index > size)return;
+		if (Index == 0)return pop_front(); //если индекс равен нулю, вызываем pop_front (удаление первого элемента в списке)
+		if (Index >= size)return;
 		Element* Temp = Head; 
 		for (int i = 0; i < Index -1; i++) Temp = Temp->pNext;  //1) Доходим до нужного элемента (предыдущий перед удаляемым
-		Element* Erased = Temp->pNext;  //2)запоминаем адрес предыдущего элемента
+		Element* Erased = Temp->pNext;  //2)запоминаем адрес удаляемого элемента
 		Temp->pNext = Erased->pNext;    //3)адрес предыдущего элемента привязываем к следующему за удаляемым элементом, исключаем элемент из списка
 		delete Erased;    //4) удаляем элемент с индексом
 		size--;                //5)уменьшаем размер списка
@@ -119,21 +172,28 @@ public:
 	//   Methods:
 	void print()const
 	{
-		Element* Temp = Head;   //Temp - итератор (указатель, при помощи которого 
-		//можно получить доступ к элементам структуры данных)
-		while (Temp)
-		{
+		//Element* Temp = Head;   //Temp - итератор (указатель, при помощи которого 
+		////можно получить доступ к элементам структуры данных)
+		//while (Temp)
+		//{
+		//	cout << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
+		//	Temp = Temp->pNext;  //переход на следующий элемент
+		//}
+		for (Element* Temp = Head; Temp; Temp = Temp->pNext)
 			cout << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
-			Temp = Temp->pNext;  //переход на следующий элемент
-		}
 		cout << "Количество элементов списка: " << size << endl;
 		cout << "Общее количество элементов: " << Element::count << endl;
 	}
 };
 
+//#define BASE_CHECK
+//#define RANGE_BASED_FOR_ARRAY
+
+#define HOME_WORK_1
 void main()
 {
 	setlocale(LC_ALL, "");
+#ifdef BASE_CHECK
 	int n;
 	cout << "Введите размер списка: "; cin >> n;
 	ForwardList list;
@@ -146,21 +206,54 @@ void main()
 	//list.push_back(123);
 	//list.pop_back();
 
-	/*int value;
+	int value;
 	int index;
 	cout << "Введите индлекс добавляемого элемента: "; cin >> index;
 	cout << "Введите значение добавляемого элемента: "; cin >> value;
-	list.insert(index, value);*/
+	list.insert(index, value);
 	list.print();
-	
+
 	/*ForwardList list2;
 	list2.push_back(3);
 	list2.push_back(5);
 	list2.push_back(8);
 	list2.print();*/
 
-	int index;
+	/*int index;
 	cout << "Введите индекс удаляемого элемента: "; cin >> index;
 	list.erase(index);
-	list.print();
+	list.print();*/
+#endif // BASE_CHECK
+
+#ifdef RANGE_BASED_FOR_ARRAY
+	int arr[] = { 3,5,8,13,21 };
+	/*for (int i = 0; i < sizeof(arr) / sizeof(int); i++)
+	{
+		cout << arr[i] << tab;
+	}
+	cout << endl;*/
+
+	//Range-based for 
+	for (int i : arr)
+	{
+		cout << i << tab;
+	}
+	cout << endl;
+#endif // RANGE_BASED_FOR_ARRAY
+#ifdef HOME_WORK_1
+	ForwardList list = { 3, 5, 8, 13, 21 };
+	//list.print();
+	for (int i : list)
+	{
+		cout << i << tab;
+	}
+	cout << endl;
+
+	ForwardList list2 = { 34, 55, 89 };
+	for (int i : list2)cout << i << tab; cout << endl;
+
+	ForwardList list3 = list + list2;
+	for (int i : list3)cout << i << tab; cout << endl;
+#endif // HOME_WORK_1
+
 }
