@@ -4,13 +4,16 @@ using std::cout;
 
 #define tab "\t"
 
-class Element
+template<typename T>class ForwardList;
+template<typename T>class Iterator;
+
+template<typename T>class Element
 {
-	int Data;      //значение элемента
-	Element* pNext; //адрес следующего элемента
+	T Data;      //значение элемента
+	Element<T>* pNext; //адрес следующего элемента
 	static int count;
 public:
-	Element(int Data, Element* pNext = nullptr) :Data(Data), pNext(pNext)
+	Element(T Data, Element<T>* pNext = nullptr) :Data(Data), pNext(pNext)
 	{
 		count++;
 		cout << "EConstructor:\t" << this << endl;
@@ -20,17 +23,19 @@ public:
 		count--;
 		cout << "EDestructor:\t" << this << endl;
 	}
-	friend class ForwardList;
-	friend class Iterator;
+	friend class ForwardList<T>;
+	friend class Iterator<T>;
 };
 
-int Element::count = 0; //инициализируем статическую переменную, объявленную в классе  'Element'
+template<typename T>
+int Element<T>::count = 0; //инициализируем статическую переменную, объявленную в классе  'Element'
 
-class Iterator
+
+template<typename T>class Iterator
 {
-	Element* Temp;
+	Element<T>* Temp;
 public:
-	Iterator(Element* Temp = nullptr) :Temp(Temp)
+	Iterator(Element<T>* Temp = nullptr) :Temp(Temp)
 	{
 		cout << "ItConstructor:\t" << this << endl;
 	}
@@ -39,36 +44,36 @@ public:
 		cout << "ItDestructor:\t" << this << endl;
 	}
 
-	Iterator& operator++()
+	Iterator<T>& operator++()
 	{
 		Temp = Temp->pNext;
 		return *this;
 	}
 
-	bool operator==(const Iterator& other)const
+	bool operator==(const Iterator<T>& other)const
 	{
 		return this->Temp == other.Temp;
 	}
-	bool operator!=(const Iterator& other)const
+	bool operator!=(const Iterator<T>& other)const
 	{
 		return this->Temp != other.Temp;
 	}
-	int& operator*()
+	T& operator*()
 	{
 		return Temp->Data;
 	}
 };
 
-class ForwardList    //forward - односвязный, однонаправленный
+template<typename T>class ForwardList    //forward - односвязный, однонаправленный
 {
-	Element* Head;    //голова списка - содержит указатель на нулевой элемент списка
+	Element<T>* Head;    //голова списка - содержит указатель на нулевой элемент списка
 	int size;
 public:
-	Iterator begin()
+	Iterator<T> begin()
 	{
 		return Head;
 	}
-	Iterator end()
+	Iterator<T> end()
 	{
 		return nullptr;
 	}
@@ -77,10 +82,10 @@ public:
 		Head = nullptr; //Если список пуст, то его голова указывает на 0
 		cout << "LConstructor:\t" << this << endl;
 	}
-	ForwardList(const std::initializer_list<int>& il) :ForwardList() //il - initializer list
+	ForwardList(const std::initializer_list<T>& il) :ForwardList() //il - initializer list
 	{
 		cout << typeid(il.begin()).name() << endl;
-		for (int const* it = il.begin(); it != il.end(); it++)
+		for (T const* it = il.begin(); it != il.end(); it++)
 		{
 			push_back(*it);
 		}
@@ -92,7 +97,7 @@ public:
 	}
 
 	//   Adding elements:
-	void push_front(int Data)
+	void push_front(T Data)
 	{
 		/*//1) создаем новый элемент
 		Element* New = new Element(Data);
@@ -101,22 +106,22 @@ public:
 		//3) голову списка переводим на новый элемент
 		Head = New;*/
 		
-		Head = new Element(Data, Head);
+		Head = new Element<T>(Data, Head);
 		size++;
 	}
 
-	void push_back(int Data)
+	void push_back(T Data)
 	{
 		if (Head == nullptr)return push_front(Data);
-		Element* New = new Element(Data);  //1)создаем новый элемент
-		Element* Temp = Head;
+		//Element<T>* New = new Element(Data);  //1)создаем новый элемент
+		Element<T>* Temp = Head;
 		while (Temp->pNext)                       //2)доходим до конца списка
 			Temp = Temp->pNext;
-		Temp->pNext = New;                 //3)добавляем элемент в конец списка
+		Temp->pNext = new Element<T>(Data);                 //3)добавляем элемент в конец списка
 		size++;
 	}
 
-	void insert(int Index, int Data)
+	void insert(int Index, T Data)
 	{
 		if(Index == 0)return push_front(Data);
 		if (Index > size)return;
@@ -125,20 +130,20 @@ public:
 		//Element* New = new Element(Data);
 
 		//2) Доходим до нужного элемента
-		Element* Temp = Head;
+		Element<T>* Temp = Head;
 		for (int i = 0; i < Index - 1; i++)Temp = Temp->pNext;
 
 		//3) Вставляем новый элемент в список:
 		/*New->pNext = Temp->pNext;
 		Temp->pNext = New;*/
-		Temp->pNext = new Element(Data, Temp->pNext);
+		Temp->pNext = new Element<T>(Data, Temp->pNext);
 		size++;
 	}
 
 	//                            Erasing elements
 	void pop_front()
 	{
-		Element* Erased = Head;  //1)запоминаем адрес удаляемого элемента
+		Element<T>* Erased = Head;  //1)запоминаем адрес удаляемого элемента
 		Head = Head->pNext;      //2)исключаем элемент из списка
 		delete Erased;           //3)удаляем элемент из памяти
 		size--;
@@ -146,7 +151,7 @@ public:
 
 	void pop_back()
 	{
-		Element* Temp = Head;
+		Element<T>* Temp = Head;
 		while (Temp->pNext->pNext)
 		{
 			Temp = Temp->pNext;
@@ -161,9 +166,9 @@ public:
 	{
 		if (Index == 0)return pop_front(); //если индекс равен нулю, вызываем pop_front (удаление первого элемента в списке)
 		if (Index >= size)return;
-		Element* Temp = Head; 
+		Element<T>* Temp = Head; 
 		for (int i = 0; i < Index -1; i++) Temp = Temp->pNext;  //1) Доходим до нужного элемента (предыдущий перед удаляемым
-		Element* Erased = Temp->pNext;  //2)запоминаем адрес удаляемого элемента
+		Element<T>* Erased = Temp->pNext;  //2)запоминаем адрес удаляемого элемента
 		Temp->pNext = Erased->pNext;    //3)адрес предыдущего элемента привязываем к следующему за удаляемым элементом, исключаем элемент из списка
 		delete Erased;    //4) удаляем элемент с индексом
 		size--;                //5)уменьшаем размер списка
@@ -179,7 +184,7 @@ public:
 		//	cout << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
 		//	Temp = Temp->pNext;  //переход на следующий элемент
 		//}
-		for (Element* Temp = Head; Temp; Temp = Temp->pNext)
+		for (Element<T>* Temp = Head; Temp; Temp = Temp->pNext)
 			cout << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
 		cout << "Количество элементов списка: " << size << endl;
 		cout << "Общее количество элементов: " << Element::count << endl;
@@ -190,7 +195,7 @@ public:
 //#define RANGE_BASED_FOR_ARRAY
 
 //#define HOME_WORK_1
-#define RANG_-BASED_FOR_LIST
+
 
 void main()
 {
@@ -243,11 +248,15 @@ void main()
 	cout << endl;
 #endif // RANGE_BASED_FOR_ARRAY
 
-#ifdef RANGE_BASED_FOR_LIST
 
-	ForwardList list = { 3, 5, 8, 13, 21 };
+	ForwardList<int> list = { 3, 5, 8, 13, 21 };
 	for (int i : list)cout << i << tab; cout << endl;
-#endif // RANGE_BASED_FOR_LIST
+
+	ForwardList<double> d_list = { 2.7, 3.14, 1.9, 8.3 };
+	for (double i : d_list)cout << i << tab; cout << endl;
+
+	ForwardList<std::string> s_list = { "Хорошо", "живет", "на", "свете", "Винни", "Пух" };
+	for (std::string i : s_list)cout << i << tab; cout << endl;
 
 
 
