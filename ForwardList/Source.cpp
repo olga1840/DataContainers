@@ -217,8 +217,9 @@ ForwardList operator+(const ForwardList& left, const ForwardList& right)
 
 //#define BASE_CHECK
 //#define RANGE_BASED_FOR_ARRAY
-//#define HOME_WORK_1
+#define HOME_WORK_1
 //#define RANG_-BASED_FOR_LIST
+//#define PREFORMANCE_CHECK
 
 void main()
 {
@@ -294,16 +295,20 @@ void main()
 	ForwardList list3 = list + list2;
 	for (int i : list3)cout << i << tab; cout << endl;
 #endif // HOME_WORK_1
+#ifdef PREFORMANCE_CHECK
 
 	int n;
 	cout << "Введите размер списка: "; cin >> n;
 	ForwardList list;
 	for (int i = 0; i < n; i++)
 	{
-		list.push_front(rand()%100);
+		list.push_front(rand() % 100);
 	}
 	cout << "Список заполнен" << endl;
 	ForwardList list2 = list;
 	for (int i : list)cout << i << tab; cout << endl;
 	for (int i : list2)cout << i << tab; cout << endl;
+#endif // PREFORMANCE_CHECK
+
+
 }
