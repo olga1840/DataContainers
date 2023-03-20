@@ -1,6 +1,8 @@
 ﻿#include<iostream>
 using namespace std;
 using std::cout;
+using std::cin;
+using std::cout;
 
 #define tab "\t"
 
@@ -64,11 +66,11 @@ class ForwardList    //forward - односвязный, однонаправл�
 	Element* Head;    //голова списка - содержит указатель на нулевой элемент списка
 	int size;
 public:
-	Iterator begin()
+	const Iterator begin()const
 	{
 		return Head;
 	}
-	Iterator end()
+	const Iterator end()const
 	{
 		return nullptr;
 	}
@@ -84,6 +86,13 @@ public:
 		{
 			push_back(*it);
 		}
+	}
+	ForwardList(const ForwardList& other)
+	{
+		for (Element* Temp = other.Head; Temp; Temp = Temp->pNext)
+			push_front(Temp->Data);
+		reverse();
+		cout << "CopyConstructor:\t" << this << endl;
 	}
 	~ForwardList()
 	{
@@ -170,6 +179,18 @@ public:
 	}
 
 	//   Methods:
+	void reverse()
+	{
+		ForwardList buffer;
+		while(Head)
+		{
+			buffer.push_front(Head->Data); //Начальный элемент добавляем в начало буфера
+			pop_front();    //удаляем начальный элемент из исходного списка
+		}
+		Head = buffer.Head;
+		buffer.Head = nullptr;
+	}
+
 	void print()const
 	{
 		//Element* Temp = Head;   //Temp - итератор (указатель, при помощи которого 
@@ -186,11 +207,18 @@ public:
 	}
 };
 
+ForwardList operator+(const ForwardList& left, const ForwardList& right)
+{
+	ForwardList cat;
+	for (Iterator it = left.begin(); it != left.end(); ++it)cat.push_back(*it);
+	for (Iterator it = right.begin(); it != right.end(); ++it)cat.push_back(*it);
+	return cat;
+}
+
 //#define BASE_CHECK
 //#define RANGE_BASED_FOR_ARRAY
-
 //#define HOME_WORK_1
-#define RANG_-BASED_FOR_LIST
+//#define RANG_-BASED_FOR_LIST
 
 void main()
 {
@@ -267,4 +295,15 @@ void main()
 	for (int i : list3)cout << i << tab; cout << endl;
 #endif // HOME_WORK_1
 
+	int n;
+	cout << "Введите размер списка: "; cin >> n;
+	ForwardList list;
+	for (int i = 0; i < n; i++)
+	{
+		list.push_front(rand()%100);
+	}
+	cout << "Список заполнен" << endl;
+	ForwardList list2 = list;
+	for (int i : list)cout << i << tab; cout << endl;
+	for (int i : list2)cout << i << tab; cout << endl;
 }
