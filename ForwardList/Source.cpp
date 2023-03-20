@@ -189,7 +189,9 @@ public:
 //#define BASE_CHECK
 //#define RANGE_BASED_FOR_ARRAY
 
-#define HOME_WORK_1
+//#define HOME_WORK_1
+#define RANG_-BASED_FOR_LIST
+
 void main()
 {
 	setlocale(LC_ALL, "");
@@ -240,6 +242,15 @@ void main()
 	}
 	cout << endl;
 #endif // RANGE_BASED_FOR_ARRAY
+
+#ifdef RANGE_BASED_FOR_LIST
+
+	ForwardList list = { 3, 5, 8, 13, 21 };
+	for (int i : list)cout << i << tab; cout << endl;
+#endif // RANGE_BASED_FOR_LIST
+
+
+
 #ifdef HOME_WORK_1
 	ForwardList list = { 3, 5, 8, 13, 21 };
 	//list.print();
