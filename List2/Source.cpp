@@ -32,7 +32,8 @@ public:
 	}
 	~List()
 	{
-		while (Head)pop_front();
+		//while (Head)pop_front();
+		while (Tail)pop_back();
 		cout << "LDestructor:\t" << this << endl;
 	}
 
@@ -77,6 +78,14 @@ public:
 		delete Head->pPrev;
 		//3) обнуляем адрес удаленного элемента
 		Head->pPrev = nullptr;
+		size--;
+	}
+	void pop_back()
+	{
+		if (Head == Tail)return pop_front();
+		Tail = Tail->pPrev;
+		delete Tail->pNext;
+		Tail->pNext = nullptr;
 		size--;
 	}
 	//                    Methods:
