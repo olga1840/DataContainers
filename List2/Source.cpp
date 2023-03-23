@@ -46,19 +46,48 @@ public:
 			size++;
 			return;
 		}
-		Element* New = new Element(Data);
+		/*Element* New = new Element(Data);
 		New->pNext = Head;
 		Head->pPrev = New;
-		Head = New;
+		Head = New;*/
+
+		Head = Head->pPrev = new Element(Data, Head);
 		size++;
 	}
 	void push_back(int Data)
 	{
 		if (Head == nullptr && Tail == nullptr)return push_front(Data);
-		Element* New = new Element(Data);
+		/*Element* New = new Element(Data);
 		New->pPrev = Tail;
 		Tail->pNext= New;
-		Tail = New;
+		Tail = New;*/
+				
+		Tail = Tail->pNext = new Element(Data,nullptr,Tail);
+		size++;
+	}
+	void insert(int Index, int Data)
+	{
+		//if (Index == 0)return push_front(Data);
+		if (Index > size)return;
+				
+		Element* Temp;
+		if (Index < size / 2)
+		{
+			Temp = Head;
+			for (int i = 0; i < Index; i++) Temp = Temp->pNext;
+		}
+		else
+		{
+			Temp = Tail;
+			for (int i = 0; i < size - Index - 1; i++)Temp = Temp->pPrev;
+		}
+		/*Element* New = new Element(Data);
+		New->pNext = Temp;
+		New->pPrev = Temp->pPrev;
+		Temp->pPrev->pNext = New;
+		Temp->pPrev = New;*/
+				
+		Temp->pPrev = Temp->pPrev->pNext = new Element(Data, Temp, Temp->pPrev);
 		size++;
 	}
 	//                  Removing elements:
@@ -88,6 +117,20 @@ public:
 		Tail->pNext = nullptr;
 		size--;
 	}
+	void  erase(int Index)
+	{
+		if (Index == 0)return pop_front(); 
+		if (Index >= size)return;
+		Element* Temp;
+		for (int i = 0; i < Index - 1; i++) Temp = Temp->pNext;  //1) Доходим до нужного элемента (предыдущий перед удаляемым
+		Element* Erased = Temp->pNext;  //2)запоминаем адрес удаляемого элемента
+		Temp->pNext = Erased->pNext;    //3)адрес предыдущего элемента привязываем к следующему за удаляемым элементом, исключаем элемент из списка
+		delete Erased;    //4) удаляем элемент с индексом
+		size--;                //5)уменьшаем размер списка
+	}
+
+	
+
 	//                    Methods:
 	void print()const
 	{
@@ -105,22 +148,39 @@ public:
 	}
 };
 
+#define BASE_CHECK
 void main()
 {
 	setlocale(LC_ALL, "");
+#ifdef BASE_CHECK
 	int n;
 	cout << "Введите размер списка: "; cin >> n;
 	List list;
-	/*for (int i = 0; i < n; i++)
-	{
-		list.push_front(rand() % 100);
-	}
-	list.print();
-	list.reverse_print();*/
-
 	for (int i = 0; i < n; i++)
 	{
 		list.push_back(rand() % 100);
 	}
 	list.print();
+	list.reverse_print();
+
+	/*for (int i = 0; i < n; i++)
+	{
+		list.push_back(rand() % 100);
+	}
+	list.print();*/
+
+	int value;
+	int index;
+	cout << "Введите индекс добавляемого элемента: "; cin >> index;
+	cout << "Введите значение добавляемого элемента: "; cin >> value;
+	list.insert(index, value);
+	list.print();
+	list.reverse_print();
+
+	/*int index;
+	cout << "Введите индекс удаляемого элемента: "; cin >> index;
+	list.erase(index);
+	list.print();*/
+#endif // BASE_CHECK
+
 }
