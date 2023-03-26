@@ -248,6 +248,9 @@ public:
 	void  erase(int Index)
 	{
 		if (Index == 0)return pop_front(); 
+		if (Index == size-1)return pop_back();
+		if (Index == size)
+		cout << "Ошибка! Индекс удаляемого элемента превышает размер списка!\t" << endl;
 		Element* Temp;
 		if (Index < size / 2)
 	{
@@ -257,8 +260,7 @@ public:
 		else
 		{
 		Temp = Tail;
-		for (int i = 0; i <= size - Index - 1; i++)Temp = Temp->pPrev;
-		return pop_back();
+		for (int i = 0; i <= size-Index-2; i++)Temp = Temp->pPrev;
 		}
 		Element* Erased = Temp;  
 		Temp->pPrev->pNext = Temp->pNext;
