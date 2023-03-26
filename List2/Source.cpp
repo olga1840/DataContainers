@@ -257,15 +257,12 @@ public:
 		else
 		{
 		Temp = Tail;
-		for (int i = 0; i < size - Index - 1; i++)Temp = Temp->pPrev;
+		for (int i = 0; i <= size - Index - 1; i++)Temp = Temp->pPrev;
+		return pop_back();
 		}
-		Element* Erased = Temp->pNext;  
-		//Element* Erased = Temp->pNext;  //2)запоминаем адрес удаляемого элемента
-		//Temp->pNext = Erased->pNext;    //3)адрес предыдущего элемента привязываем к следующему за удаляемым элементом, исключаем элемент из списка
-		//delete Erased;    //4) удаляем элемент с индексом
-		Temp->pPrev->pNext = Erased->pNext;
-		Temp->pNext->pPrev = Erased->pPrev;
-
+		Element* Erased = Temp;  
+		Temp->pPrev->pNext = Temp->pNext;
+		Temp->pNext->pPrev = Temp->pPrev;
 		delete Erased;    
 		size--;                
 	}
