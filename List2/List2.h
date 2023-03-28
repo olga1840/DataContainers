@@ -5,6 +5,8 @@ using std::cout;
 using std::cin;
 
 #define tab "\t"
+template<typename T>class ConstBaseIterator;
+
 template<typename T>class List
 {
 	class Element
