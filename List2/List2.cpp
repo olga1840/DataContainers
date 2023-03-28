@@ -1,19 +1,10 @@
 #include"List2.h"
 
-template<typename T>class List
-{
-	class Element
-	{
-		T Data;
-		Element* pNext;
-		Element* pPrev;
-	public:
-		Element(T Data, Element* pNext = nullptr, Element* pPrev = nullptr)
-			:Data(Data), pNext(pNext), pPrev(pPrev)
+template<typename T>Element<T>::Element(T Data, Element* pNext, Element* pPrev):Data(Data), pNext(pNext), pPrev(pPrev)
 		{
 			cout << "EConstructor:\t" << this << endl;
 		}
-		~Element()
+template<typename T>Element<T>::~Element()
 		{
 			cout << "EDestructor:\t" << this << endl;
 		}
