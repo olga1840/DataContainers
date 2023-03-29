@@ -23,7 +23,7 @@ template<typename T>Element<T>::~Element()
 		}
 	template<typename T>ConstBaseIterator<T>::const T& operator*()const
 		{
-			return Temp->Data;
+			return ConstBaseIterator::Temp->Data;
 		}
 
 	template<typename T>ConstIterator<T>::ConstIterator(Element* Temp) :ConstBaseIterator(Temp)
@@ -284,7 +284,7 @@ template<typename T>Element<T>::~Element()
 };
 template<typename T>void print(const List<T>& list)
 {
-	for (int i : list)
+	for (T i : list)
 	{
 		cout << i << tab;
 	}
