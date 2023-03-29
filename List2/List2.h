@@ -15,7 +15,7 @@ template<typename T>class List
 		Element* pNext;
 		Element* pPrev;
 	public:
-		Element(T Data, Element* pNext = nullptr, Element* pPrev = nullptr) :Data(Data), pNext(pNext), pPrev(pPrev);
+		Element(T Data, Element* pNext = nullptr, Element* pPrev = nullptr);
 		~Element();
 		friend class List<T>;
 	}*Head, * Tail;
@@ -36,7 +36,7 @@ public:
 	class ConstIterator :public ConstBaseIterator
 	{
 	public:
-		ConstIterator(Element* Temp = nullptr) :ConstBaseIterator(Temp);
+		ConstIterator(Element* Temp = nullptr) :ConstBaseIterator(Temp) {};
 		~ConstIterator();
 		ConstIterator& operator++();
 		ConstIterator operator++(int);
@@ -46,7 +46,7 @@ public:
 	class ConstReverseIterator :public ConstBaseIterator
 	{
 	public:
-		ConstReverseIterator(Element* Temp = nullptr) : ConstBaseIterator(Temp);
+		ConstReverseIterator(Element* Temp = nullptr) : ConstBaseIterator(Temp) {};
 		~ConstReverseIterator();
 		ConstReverseIterator& operator++();
 		ConstReverseIterator operator++(int);
@@ -78,7 +78,7 @@ public:
 	ReverseIterator rbegin();
 	ReverseIterator rend();
 	List();
-	List(const std::initializer_list<T>& il) :List();
+	List(const std::initializer_list<T>& il);
 	~List();
 
 	//     Adding elements:
