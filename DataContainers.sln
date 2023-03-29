@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ForwardList", "ForwardList\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "List2", "List2\List2.vcxproj", "{7380F257-5D8E-477B-A81B-ADC194CE5ACA}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BinaryTree", "BinaryTree\BinaryTree.vcxproj", "{18CB5BDA-DA81-4A20-90F8-DC8560F74F36}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -41,6 +43,14 @@ Global
 		{7380F257-5D8E-477B-A81B-ADC194CE5ACA}.Release|x64.Build.0 = Release|x64
 		{7380F257-5D8E-477B-A81B-ADC194CE5ACA}.Release|x86.ActiveCfg = Release|Win32
 		{7380F257-5D8E-477B-A81B-ADC194CE5ACA}.Release|x86.Build.0 = Release|Win32
+		{18CB5BDA-DA81-4A20-90F8-DC8560F74F36}.Debug|x64.ActiveCfg = Debug|x64
+		{18CB5BDA-DA81-4A20-90F8-DC8560F74F36}.Debug|x64.Build.0 = Debug|x64
+		{18CB5BDA-DA81-4A20-90F8-DC8560F74F36}.Debug|x86.ActiveCfg = Debug|Win32
+		{18CB5BDA-DA81-4A20-90F8-DC8560F74F36}.Debug|x86.Build.0 = Debug|Win32
+		{18CB5BDA-DA81-4A20-90F8-DC8560F74F36}.Release|x64.ActiveCfg = Release|x64
+		{18CB5BDA-DA81-4A20-90F8-DC8560F74F36}.Release|x64.Build.0 = Release|x64
+		{18CB5BDA-DA81-4A20-90F8-DC8560F74F36}.Release|x86.ActiveCfg = Release|Win32
+		{18CB5BDA-DA81-4A20-90F8-DC8560F74F36}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
