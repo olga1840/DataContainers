@@ -86,8 +86,38 @@ public:
 		cout << Root->Data << "\t";
 		print(Root->pRight);
 	}
+	int Depth(Element* Root)
+	{
+		if (Root == nullptr)return 1;
+		else 
+		{
+			int lchild = Depth(Root->pLeft);
+			int rchild = Depth(Root->pRight);
+			return 1 + (lchild > rchild ? lchild : rchild);
+		}
+	}
+	void Clear(Element* Root)
+	{
+		if (Root == nullptr)delete Root;
+		if (Root != nullptr)
+		{
+			if (Root->pLeft != nullptr) Clear(Root->pLeft);
+			if (Root->pRight != nullptr) Clear(Root->pRight);
+			delete Root;
+		}
+	}
+	void Erase(Element* Root, int Data)
+	{
+		if (Root == nullptr) return;
+		if (Data < Root->Data) return Erase(Root->pLeft, Data);
+		else if (Data > Root->Data) return Erase(Root->pRight, Data);
+		else
+		{
 
+		}
+	}
 };
+ 
 
 class UniqueTree :public Tree
 {
@@ -126,6 +156,10 @@ void main()
 	cout << "Количество элементов дерева: " << tree.Count(tree.getRoot()) << endl;
 	cout << "Сумма элементов дерева: " << tree.Sum(tree.getRoot()) << endl;
 	cout << "Среднее арифметическое элементов дерева: " << tree.Avg() << endl;
+	cout << "Глубина дерева: " << tree.Depth(tree.getRoot()) << endl;
+
+	tree.Clear(tree.getRoot());
+
 	UniqueTree tree2;
 	for (int i = 0; i < n; i++)
 	{
@@ -139,4 +173,6 @@ void main()
 	cout << "Количество элементов дерева: " << tree2.Count(tree.getRoot()) << endl;
 	cout << "Сумма элементов дерева: " << tree2.Sum(tree2.getRoot()) << endl;
 	cout << "Среднее арифметическое элементов дерева: " << tree2.Avg() << endl;
+	cout << "Глубина дерева: " << tree2.Depth(tree2.getRoot()) << endl;
+	tree2.Clear(tree2.getRoot());
 }
